@@ -1,6 +1,7 @@
 const nodeMailer = require("nodemailer");
+import { EmailOptions } from "./SendEmailType"; 
 
-const sendEmail = async (to: string, subject: string, text: string) => {
+const sendEmail = async (options: EmailOptions) => {
   try {
     const transporter = nodeMailer.createTransport({
      service: "gmail",
@@ -12,9 +13,9 @@ const sendEmail = async (to: string, subject: string, text: string) => {
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to:to,
-      subject,
-      text,
+      to: options.email,
+      subject: options.subject,
+      text: options.text,
     };
 
     await transporter.sendMail(mailOptions);
@@ -23,3 +24,5 @@ const sendEmail = async (to: string, subject: string, text: string) => {
     console.error("Error sending email:", error);
   }
 }
+
+export default sendEmail;

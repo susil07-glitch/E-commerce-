@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import envConfig from "../../Config/Config";
 
 import User from "./UserModel";
+import sendEmail from "../../../Services/SendEmail";
 const jwt = require('jsonwebtoken');
 
 export const RegisterUser = async (req: Request, res: Response) => {
@@ -102,7 +103,7 @@ export const LoginUser = async (req: Request, res: Response) => {
 
 export const ForgetPassword = async (req: Request, res: Response) => {
   try {
-    const { Email} = req.body;
+    const {Email} = req.body;
 
     if (!Email){
       return res.status(400).json({
@@ -124,6 +125,19 @@ export const ForgetPassword = async (req: Request, res: Response) => {
       console.log(opt);
       
       // here we can send the otp to the user email using nodemailer or any other service //
+
+      sendEmail({
+        email:Email,
+        subject: "Password reset OTP",
+        text: `Your OTP for password reset is ${opt}. It is valid for 10 minutes.`
+      });
+      
+      return res.status(200).json({
+        message: "OTP sent to email successfully"
+      }); 
+
+      // to reset the password //
+      
 
     
   }
