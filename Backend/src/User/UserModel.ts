@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
+import { UserTypes } from "./UserTypes";
 
 const userSchema = new mongoose.Schema({
     UserEmail: {
         type: String,
         required: [true, 'Email is required'],
-        unique: true,
-        match: [/\S+@\S+\.\S+/, 'Please use a valid email address']         
+        
+        
     },
     UserPhoneNumber: {
         type: String,
@@ -29,4 +30,4 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;  
+export default User;

@@ -1,6 +1,6 @@
 
 import { storage,multer } from "../MiddleWare/multerConfig";
-import { RegisterUser } from "./UserController";
+import { LoginUser, RegisterUser } from "./UserController";
 
 
 const express = require('express');
@@ -12,5 +12,6 @@ const upload = multer({ storage: storage });
 
 
 
-Userroutes.route('/register/api').post (upload.single('file'), RegisterUser);
+Userroutes.route('/register').post (RegisterUser);
+Userroutes.route('/login').post (LoginUser);
  export default Userroutes;

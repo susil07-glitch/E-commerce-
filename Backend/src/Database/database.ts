@@ -1,10 +1,18 @@
 import mongoose from "mongoose";
+import envConfig from "../Config/Config";
+
+
+
 
 
 const connectDB = async () => {
     try {
-        await mongoose.connect("mongodb://localhost:27017/e-commerce");
-        console.log("Connected to MongoDB");
+        await mongoose.connect(envConfig.mongodbUrl as string, {
+            connectTimeoutMS: 5000
+        });
+
+        console.log("MongoDB connected successfully");
+
     } catch (error) {
         console.error("Error connecting to MongoDB:", error);
         process.exit(1);

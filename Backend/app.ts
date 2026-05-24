@@ -1,4 +1,6 @@
 import express from 'express';
+import Userroutes from './src/User/UserRoutes';
+import connectDB from './src/Database/database';
 
 const app = express();
 
@@ -7,6 +9,14 @@ const app = express();
 
 
 
+app.use(express.json());
+
+// database connection //
+
+connectDB();    
+
+// auth routes //
+app.use('/auth/api',Userroutes);
 
 
 

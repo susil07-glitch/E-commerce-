@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { User } from "./UserTypes";
+import bcrypt from "bcryptjs";
+import User from "./UserModel";
 
 export const RegisterUser = async (req: Request, res: Response) => {
   try {
@@ -19,17 +20,20 @@ export const RegisterUser = async (req: Request, res: Response) => {
         .status(400)
         .json({ message: "Email or phone number already in use" });
     }
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hashSync(password, salt);
 
-    const user = await User.create({
+
+    const newuser = await User .create({
       UserEmail: UserEmail,
       UserPhoneNumber: UserPhoneNumber,
-      password: password,
+      password: hashedPassword,
       UserName: UserName,
     });
 
     res.status(201).json({
       message: "User registered successfully",
-      data: user,
+      data: newuser,
     });
   } catch (error) {
     console.log(error);
@@ -38,6 +42,8 @@ export const RegisterUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+
 
 // login user controller //
 
@@ -51,18 +57,19 @@ export const LoginUser = async (req: Request, res: Response) => {
         .json({ message: "Email and password are required" });
     }
 
-    const user = await User.findOne({ UserEmail });
-    if (!user) {
+    const newuser = await User.findOne({ UserEmail });
+    if (!newuser) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    if (user.password !== password) {
+    const isMatch = await bcrypt.compare(password, newuser.password);
+    if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
     res.status(200).json({
       message: "Login successful",
-      data: user,
+      data: newuser,
     });
   } catch (error) {
     console.log(error);
