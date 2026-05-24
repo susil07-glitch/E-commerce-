@@ -1,5 +1,5 @@
 
-import { storage,multer } from "../MiddleWare/multerConfig";
+import { storage,multer } from "../../MiddleWare/multerConfig";
 import { LoginUser, RegisterUser } from "./UserController";
 
 

@@ -1,5 +1,5 @@
 import express from 'express';
-import Userroutes from './src/User/UserRoutes';
+import Userroutes from './src/Controller/User/UserRoutes';
 import connectDB from './src/Database/database';
 
 const app = express();

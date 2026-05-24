@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import envConfig from "../Config/Config";
+import envConfig from "../../Config/Config";
 
 import User from "./UserModel";
 const jwt = require('jsonwebtoken');
@@ -95,4 +95,42 @@ export const LoginUser = async (req: Request, res: Response) => {
       message: "Something went wrong",
     });
   }
-};
+}; 
+
+
+// Forget password//
+
+export const ForgetPassword = async (req: Request, res: Response) => {
+  try {
+    const { Email} = req.body;
+
+    if (!Email){
+      return res.status(400).json({
+         message: "Email is required" 
+        });  
+    }
+     const isMatched = await User.findOne({Email});
+  // if the email is register or not //
+
+     if(!isMatched){
+      return res.status(400).json({
+        message: "User not found with this email"
+      });
+     }
+
+      // send otp to that email //
+
+      const opt= Math.floor(100000 + Math.random() * 900000).toString();
+      console.log(opt);
+      
+      // here we can send the otp to the user email using nodemailer or any other service //
+
+    
+  }
+   catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Something went wrong",
+    });
+  }
+}
