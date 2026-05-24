@@ -1,19 +1,22 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
+import envConfig from "../Config/Config";
+
 import User from "./UserModel";
+const jwt = require('jsonwebtoken');
 
 export const RegisterUser = async (req: Request, res: Response) => {
   try {
-    const { UserEmail, UserPhoneNumber, password, UserName } = req.body;
+    const { Email, UserPhoneNumber, password, UserName } = req.body;
 
-    if (!UserEmail || !UserPhoneNumber || !password || !UserName) {
+    if (!Email || !UserPhoneNumber || !password || !UserName) {
       return res.status(400).json({
         message: "All fields are required",
       });
     }
 
     const existingUser = await User.findOne({
-      $or: [{ UserEmail }, { UserPhoneNumber }],
+      $or: [{ Email }, { UserPhoneNumber }],
     });
     if (existingUser) {
       return res
@@ -25,7 +28,7 @@ export const RegisterUser = async (req: Request, res: Response) => {
 
 
     const newuser = await User .create({
-      UserEmail: UserEmail,
+      Email: Email,
       UserPhoneNumber: UserPhoneNumber,
       password: hashedPassword,
       UserName: UserName,
@@ -49,31 +52,46 @@ export const RegisterUser = async (req: Request, res: Response) => {
 
 export const LoginUser = async (req: Request, res: Response) => {
   try {
-    const { UserEmail, password } = req.body;
+    const { Email, password } = req.body;
 
-    if (!UserEmail || !password) {
+    if (!Email || !password) {
       return res
         .status(400)
         .json({ message: "Email and password are required" });
     }
 
-    const newuser = await User.findOne({ UserEmail });
-    if (!newuser) {
-      return res.status(400).json({ message: "Invalid email or password" });
+    const UserFound = await User.findOne({ Email });
+
+    if (!UserFound) {
+      return res
+        .status(400)
+        .json({ message: "Invalid email or password" });
     }
 
-    const isMatch = await bcrypt.compare(password, newuser.password);
+    // FIXED: no [0]
+    const isMatch = await bcrypt.compare(password, UserFound.password);
+
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res
+        .status(400)
+        .json({ message: "Invalid email or password" });
     }
 
-    res.status(200).json({
+    const token = jwt.sign(
+      { id: UserFound._id },
+      envConfig.jwtSecret,
+      { expiresIn: "30d" }
+    );
+
+    return res.status(200).json({
       message: "Login successful",
-      data: newuser,
+      data: UserFound,
+      token,
     });
+
   } catch (error) {
     console.log(error);
-    res.status(400).json({
+    return res.status(500).json({
       message: "Something went wrong",
     });
   }

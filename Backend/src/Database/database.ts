@@ -10,6 +10,7 @@ const connectDB = async () => {
         await mongoose.connect(envConfig.mongodbUrl as string, {
             connectTimeoutMS: 5000
         });
+       
 
         console.log("MongoDB connected successfully");
 

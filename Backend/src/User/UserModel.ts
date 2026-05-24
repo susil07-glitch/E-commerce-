@@ -2,9 +2,10 @@ const mongoose = require('mongoose');
 import { UserTypes } from "./UserTypes";
 
 const userSchema = new mongoose.Schema({
-    UserEmail: {
+    Email: {
         type: String,
         required: [true, 'Email is required'],
+        unique: true
         
         
     },
