@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema({
         type:String,
         enum:['admin','customer'],
         default:'customer'
+    },
+    opt:{
+        type :Number
     }
 });
 

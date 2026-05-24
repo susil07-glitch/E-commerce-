@@ -121,22 +121,24 @@ export const ForgetPassword = async (req: Request, res: Response) => {
 
       // send otp to that email //
 
-      const opt= Math.floor(100000 + Math.random() * 900000).toString();
-      console.log(opt);
+      const otp= Math.floor(100000 + Math.random() * 900000).toString();
+      isMatched[0].otp=otp
+      await isMatched[0].save();
       
-      // here we can send the otp to the user email using nodemailer or any other service //
+      // to send email to register gmail //
+
 
       sendEmail({
         email:Email,
         subject: "Password reset OTP",
-        text: `Your OTP for password reset is ${opt}. It is valid for 10 minutes.`
+        text: `Your OTP for password reset is ${otp}. It is valid for 10 minutes.`
       });
       
       return res.status(200).json({
         message: "OTP sent to email successfully"
       }); 
 
-      // to reset the password //
+    
       
 
     
@@ -147,4 +149,92 @@ export const ForgetPassword = async (req: Request, res: Response) => {
       message: "Something went wrong",
     });
   }
+}
+
+
+// Verify OTP //
+
+export const VerifyOTP = async (req: Request, res: Response) => {
+  try{
+    const {Email,otp}=req.body;
+    
+    if (!Email || !otp){
+      return res.status(400).json({
+         message: "Email and OTP are required" 
+        });  
+    }
+
+    // to check the opt is correct or not //
+    const isCorrect = await User.findOne({Email});
+
+    if(!isCorrect){
+      return res.status(400).json({
+        message: "Invalid OTP or email"
+      });
+    }
+
+    if(isCorrect[0].otp !== otp){
+      return res.status(400).json({
+        message: "Invalid OTP "
+      });
+    }else{
+      // to despost the opt once used so that it cannot be used again //
+      isCorrect[0].otp=undefined
+       await isCorrect[0].save();
+
+      return res.status(200).json({
+        message : "opt is correct /matched "
+
+      })
+    }
+
+
+  }catch (error) {    
+    console.log(error);
+    return res.status(500).json({
+      message: "Something went wrong",
+    });
+  } 
+
+}
+
+// to reset password//
+
+export const ResetPassword = async (req: Request, res: Response) => {
+  try{
+    const {Email,newPassword,ConformPassword}=req.body;
+    if (!Email || !newPassword || !ConformPassword){
+      return res.status(400).json({
+         message: "Email, new password and confirm password are required" 
+        });  
+    }
+    if(newPassword !==ConformPassword){
+      return res.status(400).json({
+        message:"New password and confirm password do not match"
+      })
+    }
+
+    const userExist= await User.findOne({Email});
+     if (!userExist){
+      return res.status(400).json({
+        message :"User not found with this email"
+      })
+
+  } else {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hashSync(newPassword, salt);
+    userExist.password=hashedPassword;
+    await userExist.save();
+
+    return res.status(200).json({
+      message: "Password reset successfully"
+    });     
+  }
+
+  }catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Something went wrong",
+    });
+  } 
 }
