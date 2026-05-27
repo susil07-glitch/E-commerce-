@@ -27,6 +27,15 @@ ProductStatus:{
     type:String,
     enum:["available","out of stock"],
     default:"available"
+},
+ProductImage:{
+    type:String
+
+},
+CreatedBy:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User",
+    required:true
 }
 
 

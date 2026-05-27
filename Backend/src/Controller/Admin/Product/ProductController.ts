@@ -3,9 +3,14 @@ import Product from "./ProductModel";
 import { AuthRequest } from "../../../types/RequestExtend/userRequestExtend";
 
 export const createProduct = async (req: Request, res: Response) => {
-  console.log((req as AuthRequest).user);
+  
+
+
 
   try {
+    const Image =req.file
+    console.log(req.file);
+
     const {
       Name,
       Description,
@@ -35,6 +40,8 @@ export const createProduct = async (req: Request, res: Response) => {
       Category,
       ProductStockQty: Number(ProductStockQty),
       ProductStatus,
+      ProductImage: Image ? Image.originalname : undefined, // Save the file path of the uploaded image
+      CreatedBy: (req as AuthRequest).user._id, // Assuming you have user authentication and the user ID is available in the request
     });
 
     return res.status(201).json({

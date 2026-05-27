@@ -11,6 +11,8 @@ const app = express();
 
 
 app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+
 
 // database connection //
 
@@ -19,6 +21,11 @@ connectDB();
 // auth routes //
 app.use('/auth/api',Userroutes);
 app.use('/product/api',Productroutes);
+
+
+// telling node to accsee the upload folder//
+app.use((express.static("uploads")));
+
 
 
  // server starter function//

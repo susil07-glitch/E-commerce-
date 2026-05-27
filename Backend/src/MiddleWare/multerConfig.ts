@@ -1,15 +1,31 @@
-import multer from 'multer';
-import path from 'path';
+import multer from "multer";
+import path from "path";
 
-// Multer configuration for file uploads
 const storage = multer.diskStorage({
-    destination: (req:any, file:Express.Multer.File, cb:any) => {
-        cb(null, './src/Storage'); // Specify the directory to save uploaded files
-    },
-    filename: (req:any, file:Express.Multer.File, cb:any) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Generate a unique filename
-    }
+  destination: (req, file, cb:any) => {
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (!allowedTypes.includes(file.mimetype)) {
+      cb(new Error("Only JPEG, PNG, and JPG files are allowed"));
+      return
+    }  
+    cb(null, "./uploads");
+  },
+
+  filename: (req, file, cb) => {
+    const uniqueSuffix =
+      Date.now() + "-" + Math.round(Math.random() * 1e9);
+
+    cb(
+      null,
+      file.fieldname +
+        "-" +
+        uniqueSuffix +
+        path.extname(file.originalname)
+    );
+  },
 });
 
-export {multer,storage};
+const upload = multer({ storage });
+
+export default upload;
