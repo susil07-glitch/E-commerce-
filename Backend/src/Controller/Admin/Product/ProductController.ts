@@ -3,13 +3,8 @@ import Product from "./ProductModel";
 import { AuthRequest } from "../../../types/RequestExtend/userRequestExtend";
 
 export const createProduct = async (req: Request, res: Response) => {
-  
-
-
-
   try {
     const Image =req.file
-    console.log(req.file);
 
     const {
       Name,
@@ -41,7 +36,8 @@ export const createProduct = async (req: Request, res: Response) => {
       ProductStockQty: Number(ProductStockQty),
       ProductStatus,
       ProductImage: Image ? Image.originalname : undefined, // Save the file path of the uploaded image
-      CreatedBy: (req as AuthRequest).user._id, // Assuming you have user authentication and the user ID is available in the request
+      CreatedBy: (req as AuthRequest).user._id, // which user has created that product //
+
     });
 
     return res.status(201).json({
@@ -54,3 +50,94 @@ export const createProduct = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+// To get all product //
+
+export const getAllProducts= async (req:Request, res:Response)=>{
+  try{
+    const Products= await Product.find()
+
+    if(!Products){
+      return res.status(404).json({
+        message:"No product found "
+
+      })
+    }
+    return res.status(200).json({
+      message:"Products featched successfully",
+      data:Products
+    })
+
+  }catch(error){
+    console.error(error);
+    res.status(401).json({
+      message:"Something went wrong"
+
+    })
+
+  }
+
+}
+
+// to edit the product //
+export const editProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const Image = req.file;
+    const {
+      Name,
+      Description,
+      Price,
+      Category,
+      ProductStockQty,
+      ProductStatus,
+    } = req.body;
+    if (
+      !Name ||
+      !Description ||
+      Price === undefined ||
+      !Category ||
+      ProductStockQty === undefined ||
+      !ProductStatus
+    ) {
+      return res.status(400).json({
+        message: "All Field are required",
+      });
+
+    }
+    const updateProduct = await Product.findByIdAndUpdate(id,{
+      ProductNmae:Name,
+      Description,
+      Price:Number(Price),
+      Category,
+      ProductStockQty:Number(ProductStockQty),
+      ProductStatus,
+      ProductImage:Image ? Image.originalname : undefined, // Save the file path of the uploaded image
+
+    })
+
+    if(!updateProduct){
+      return res.status(404).json({
+        message:"Product not found"
+
+      })
+    }else{
+      res.status(200).json({
+        message:"Product edited successfully "
+
+      })
+    }
+
+  } catch (error :any) {
+    console.error(error)
+    res.status(401).json({
+      message:error.message,
+
+    })
+  }
+};
+
+// to delete Created product //
+
+
