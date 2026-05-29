@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import envConfig from "../../Config/Config";
 
-import User from "./UserModel";
+import User from "./AuthModel";
 import sendEmail from "../../../Services/SendEmail";
 const jwt = require('jsonwebtoken');
 

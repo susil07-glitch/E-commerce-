@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-import { UserTypes } from "./UserTypes";
+import { UserTypes } from "./AuthTypes";
 
 const userSchema = new mongoose.Schema({
     Email: {

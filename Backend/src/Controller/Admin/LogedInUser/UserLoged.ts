@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../../User/UserModel";
+import User from "../../Auth/AuthModel";
 
 
 export const userLoged = async (
@@ -74,3 +74,42 @@ export const userLoged = async (
 
     }
 }
+
+//  to delete the user //
+
+export const deleteUser=async(req:Request,res:Response)=>{
+  try {
+    const userId=req.params.id
+
+    if(!userId){
+      return res.status(401).json({
+        message:"please provide user id  "
+
+      })
+    }
+
+    const findUserId= await User.findById(userId)
+        if(!findUserId){
+          return res.status(401).json({
+            message:"User Not Found"
+          })
+        }else{
+           await User.findByIdAndDelete(userId)
+           res.status(201).json({
+            message:"User deleted suyccessfull"
+
+           })
+
+        }
+
+  } catch (error) {
+    res.status(404).json({
+      message:"something went wrong "
+    })
+    
+  }
+
+}
+
+
+

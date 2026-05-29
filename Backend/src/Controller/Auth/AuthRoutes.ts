@@ -1,6 +1,6 @@
 
 
-import { ForgetPassword, LoginUser, RegisterUser } from "./UserController";
+import { ForgetPassword, LoginUser, RegisterUser } from "./AuthController";
 
 
 const express = require('express');

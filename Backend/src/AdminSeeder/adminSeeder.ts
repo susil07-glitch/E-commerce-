@@ -2,7 +2,7 @@
 
 const bcrypt = require("bcryptjs");
 
-import User from "../Controller/User/UserModel";
+import User from "../Controller/Auth/AuthModel";
 
 
 const adminSeeder=async()=>{

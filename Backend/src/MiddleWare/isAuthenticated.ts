@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 const jwt = require('jsonwebtoken');    
 import envConfig from "../Config/Config";
 import { promisify } from "node:util";
-import User from "../Controller/User/UserModel";
+import User from "../Controller/Auth/AuthModel";
 import { AuthRequest } from "../types/RequestExtend/userRequestExtend";
 
 
