@@ -16,9 +16,7 @@ connectDB();
 // auth routes //
 app.use('/auth/api',Userroutes)
 app.use('/product/api',Productroutes);
-app.use('/adminUser/api',logedUserRoutes
-
-)
+app.use('/adminUser/api',logedUserRoutes)
 
 
 // telling node to accsee the upload folder//

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Product from "./ProductModel";
+import product from "./ProductModel";
 import { AuthRequest } from "../../../types/RequestExtend/userRequestExtend";
 import { error } from "node:console";
 import fs from "fs";
@@ -33,7 +33,7 @@ export const createProduct = async (req: Request, res: Response) => {
       });
     }
 
-    const newProduct = await Product.create({
+    const newProduct = await product.create({
       ProductName: Name,
       Description,
       Price: Number(Price),
@@ -41,7 +41,7 @@ export const createProduct = async (req: Request, res: Response) => {
       ProductStockQty: Number(ProductStockQty),
       ProductStatus,
       ProductImage: Image ? Image.originalname : undefined, // Save the file path of the uploaded image
-      CreatedBy: (req as AuthRequest).user._id, // which user has created that product //
+      ProductCreatedBy: (req as AuthRequest).user._id, // which user has created that product //
 
     });
 
@@ -61,7 +61,7 @@ export const createProduct = async (req: Request, res: Response) => {
 
 export const getAllProducts= async (req:Request, res:Response)=>{
   try{
-    const Products= await Product.find()
+    const Products= await product.find()
 
     if(!Products){
       return res.status(404).json({
@@ -110,7 +110,7 @@ export const editProduct = async (req: Request, res: Response) => {
       });
 
     }
-    const updateProduct = await Product.findByIdAndUpdate(id,
+    const updateProduct = await product.findByIdAndUpdate(id,
       {
       ProductNmae:Name,
       Description,
@@ -152,7 +152,7 @@ export const editProduct = async (req: Request, res: Response) => {
     try {
 
       const {id}=req.params
-      const productToDelete= await Product.findById(id)
+      const productToDelete= await product.findById(id)
       if(!productToDelete){
        return  res.status(401).json({
           message:"product not found"
@@ -176,7 +176,7 @@ export const editProduct = async (req: Request, res: Response) => {
 
         }
       
-       const productDeleted= await Product.findByIdAndDelete(id)
+       const productDeleted= await product.findByIdAndDelete(id)
        if(productDeleted){
         return res.status(200).json({
           message:"product deleted successfully"
@@ -199,7 +199,7 @@ export const editProduct = async (req: Request, res: Response) => {
  export const singleProductFetched=async(req:Request,res:Response)=>{
   try {
     const {id}=req.params
-    const singleFeatch= await Product.findById(id)
+    const singleFeatch= await product.findById(id)
 
     if(!singleFeatch){
        return res.status(404).json({

@@ -1,5 +1,6 @@
 
 import mongoose from "mongoose";
+import review from "../../Model/reviewModel";
 
 const productSchema= new mongoose.Schema({
 ProductName:{
@@ -32,7 +33,9 @@ ProductImage:{
     type:String
 
 },
-CreatedBy:{
+reviews:{review},
+
+ProductCreatedBy:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"User",
     required:true

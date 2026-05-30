@@ -7,11 +7,6 @@ const reviewSchema= new Schema({
         ref:"User",
         required:[true,"userId must belongs to User"]
     },
-    ProductId:{
-        type:Schema.Types.ObjectId,
-        ref:"Product",
-        required:[true,"Productid must belongs to porduct"]
-    },
     Rating:{
         type:Number,
         required:true,
