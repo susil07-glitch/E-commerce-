@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+import { Schema } from "mongoose";
 import { UserTypes } from "./AuthTypes";
 
 const userSchema = new mongoose.Schema({
@@ -31,7 +32,14 @@ const userSchema = new mongoose.Schema({
     },
     opt:{
         type :Number
-    }
+    },
+    cart:[
+        {
+            type:Schema.Types.ObjectId ,
+            ref:"product"
+        }
+        ]
+        
 },{
     timestamps:true
 });
