@@ -1,8 +1,8 @@
 
  import { Response,Request } from "express"
-import { AuthRequest } from "../../types/RequestExtend/userRequestExtend"
-import review from "../Model/reviewModel"
-import product from "../Admin/Product/ProductModel"
+import { AuthRequest } from "../../../types/RequestExtend/userRequestExtend"
+import review from "../../Model/reviewModel"
+import product from "../../Admin/Product/ProductModel"
 
  
 // to create product review //
