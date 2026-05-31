@@ -3,9 +3,14 @@ import mongoose, { Schema } from "mongoose";
 
 const reviewSchema= new Schema({
     UserId:{
-        type:Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"User",
         required:[true,"userId must belongs to User"]
+    },
+    ProductId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Product",
+        required:[true,"productId must belong to a product"]
     },
     Rating:{
         type:Number,
