@@ -5,6 +5,7 @@ import Productroutes from './src/Controller/Admin/Product/ProductRoutes';
 import logedUserRoutes from './src/Controller/Admin/LogedInUser/logedUserRoutes'
 import profileroutes from './src/Controller/User/Routes/ProfileRoutes/ProfileRoutes'
 import cartRoutes from './src/Controller/User/Routes/CartRoutes/CartRoutes'
+import orderRoutes from './src/Controller/User/Routes/OrderRoutes/OrderRoutes';
 
 
 const app = express();
@@ -16,12 +17,14 @@ app.use(express.urlencoded({extended:true}));
 
 connectDB();    
 
-// auth routes //
+// Routing all the  Routes //
 app.use('/auth/api',Userroutes)
 app.use('/product/api',Productroutes);
 app.use('/adminUser/api',logedUserRoutes);
 app.use('/user/api',profileroutes);
 app.use('/user/api',cartRoutes);
+app.use('/order/api',orderRoutes);
+
 
 
 
