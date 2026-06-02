@@ -3,3 +3,17 @@
 git add .
 git commit -m "creating orderupdate,orderCancel api "
 git push
+
+
+
+
+to commit specific folder or file 
+
+
+ git add src/Controller/
+ git commit -m " message here "
+ git push 
+
+
+
+ 
