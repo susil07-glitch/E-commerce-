@@ -63,3 +63,114 @@ export const getMyOrders=async (req:Request,res:Response)=>{
         });
     }
 }   
+
+
+// to update order by user before it is shipped or delivered //
+
+export const updateMyOrder=async (req:Request,res:Response)=>{
+    try {
+        const userId=(req as AuthRequest).user._id;
+        const orderId=req.params
+        
+        if(!orderId){
+            return res.status(400).json({
+                message:"Order ID is required"
+            });
+        }
+
+
+        const orderExist =await OrderModel.findOne({_id:orderId,Userid:userId});
+
+        if(!orderExist){
+            return res.status(404).json({
+                message:"Order not found"
+            });
+        }
+
+        if(orderExist.OrderStuatus==="Shipped" || orderExist.OrderStuatus==="Delivered"){
+            return res.status(400).json({
+                message:"Order cannot be updated as it is already shipped or delivered"
+            });
+        }
+
+         const updateOrder =await OrderModel.findByIdAndUpdate({orderId});
+         if(!updateOrder){
+            return res.status(404).json({
+                message:"Failed to update Order"
+            })
+
+         }
+
+         return res.status(200).json({
+            message:"Order updated successfully",
+
+            data:updateOrder
+
+         });
+
+
+       
+
+    } catch (error) {
+        console.error("Error updating order:", error);
+        return res.status(500).json({message:"Internal server error"});
+    }
+}
+
+
+
+// to cancel order by user before it is shipped or delivered //
+
+export const cancelMyOrder=async (req:Request,res:Response)=>{
+    try {
+        const userId=(req as AuthRequest).user._id;
+        const orderId=req.params
+        
+        if(!orderId){
+            return res.status(400).json({
+                message:"Order ID is required"
+            });
+        }
+
+        const orderExist =await OrderModel.findOne({_id:orderId,Userid:userId});
+
+        if(!orderExist){
+            return res.status(404).json({
+                message:"Order not found"
+            });
+        }
+
+        if(orderExist.OrderStuatus==="Shipped" || orderExist.OrderStuatus==="Delivered"){
+            return res.status(400).json({
+                message:"Order cannot be cancelled as it is already shipped or delivered"
+            });
+        }
+
+         const cancelOrder =await OrderModel.findByIdAndUpdate({
+            orderId},{OrderStuatus:"cancelled"});
+         if(!cancelOrder){
+            return res.status(404).json({
+                message:"Failed to cancel Order"
+            })
+
+         }
+
+         return res.status(200).json({
+            message:"Order cancelled successfully",
+        });
+        
+        
+
+        
+    } catch (error) {
+        res.status(500).json({
+            message:"Internal server error"
+        });
+
+        
+    }
+}
+
+
+
+   
