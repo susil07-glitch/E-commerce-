@@ -208,3 +208,40 @@ export const deleteMyOrder=async (req:Request,res:Response)=>{
         }); 
     }
 }
+
+
+// to get single Order//
+
+
+export const getSingleOrder=async (req:Request,res:Response)=>{
+    try {
+        const orderId=req.params
+        
+        if(!orderId){
+            return res.status(400).json({
+                message:"Order ID is required"
+            });
+        }
+
+        const orderExist =await OrderModel.findOne({_id:orderId});
+
+        if(!orderExist){
+            return res.status(404).json({
+                message:"Order not found"
+            });
+        }
+
+        const getOrder= await OrderModel.find(orderId)
+
+         return res.status(200).json({
+            message:"Order fetched successfully",
+        });
+        
+    } catch (error) {
+        res.status(500).json({
+            message:"Internal server error"
+        });
+
+        
+    }
+}
