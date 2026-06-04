@@ -33,8 +33,12 @@ ProductImage:{
     type:String
 
 },
-reviews:{review},
-
+reviews:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'review' 
+   }
+],
+  
 ProductCreatedBy:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"User",
@@ -49,5 +53,6 @@ ProductCreatedBy:{
 
 
 
-const product=mongoose.model("Product",productSchema);
+const product =mongoose.model("Product",productSchema);
+
 export default product;
