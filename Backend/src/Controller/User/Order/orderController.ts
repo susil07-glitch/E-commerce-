@@ -173,4 +173,38 @@ export const cancelMyOrder=async (req:Request,res:Response)=>{
 
 
 
-   
+   // to delete my order//
+
+
+export const deleteMyOrder=async (req:Request,res:Response)=>{
+    try {
+        const userId=(req as AuthRequest).user._id;
+        const orderId=req.params
+        
+        if(!orderId){
+            return res.status(400).json({
+                message:"Order ID is required"
+            });
+        }
+
+        const orderExist =await OrderModel.findById({_id:orderId,Userid:userId});
+
+        if(!orderExist){
+            return res.status(404).json({
+                message:"Order not found"
+            });
+        }
+
+
+         const cancelOrder =await OrderModel.findByIdAndDelete(orderId)
+            return res.status(404).json({
+                message:"Failed to cancel Order"
+            })
+
+
+    } catch (error) {
+        res.status(500).json({
+            message:"Internal server error"
+        }); 
+    }
+}
