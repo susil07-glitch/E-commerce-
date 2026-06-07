@@ -4,6 +4,7 @@ import envConfig from "../../Config/Config";
 
 import User from "./AuthModel";
 import sendEmail from "../../../Services/SendEmail";
+import Userroutes from "./AuthRoutes";
 const jwt = require('jsonwebtoken');
 
 export const RegisterUser = async (req: Request, res: Response) => {
@@ -62,15 +63,13 @@ export const LoginUser = async (req: Request, res: Response) => {
     }
 
     const UserFound = await User.findOne({ Email });
-
     if (!UserFound) {
       return res
         .status(400)
         .json({ message: "Invalid email or password" });
     }
-
-    // FIXED: no [0]
-    const isMatch = await bcrypt.compare(password, UserFound.password);
+    
+    const isMatch = await bcrypt.compare(password,UserFound.password);
 
     if (!isMatch) {
       return res
