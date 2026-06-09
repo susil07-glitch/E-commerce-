@@ -50,7 +50,7 @@ const ServerStarter=()=>{
 
 const io=new Server(ServerStarter());
 
-io.on('connnection',()=>{
-
+io.on('connnection',(socket: any)=>{
+socket.
     console.log ("A User Connnected");
 })
