@@ -13,6 +13,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
+const {Server} =require('socket.io');
+
+
 
 // database connection //
 
@@ -45,4 +48,9 @@ const ServerStarter=()=>{
     })  
 }
 
-ServerStarter();
+const io=new Server(ServerStarter());
+
+io.on('connnection',()=>{
+
+    console.log ("A User Connnected");
+})
